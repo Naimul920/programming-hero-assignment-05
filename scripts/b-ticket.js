@@ -4,110 +4,90 @@ function scrollTicketSection() {
 }
 let clickItemId = [];
 document.getElementById('buttonContainer').addEventListener('click', function(event) {
-        if(event.target.classList.contains('myButton') === true && event.target.classList.contains('clickedItem') === false ){
-            // console.log(event.target.innerText);
-            const clickedButtonId = event.target.innerText;
-            
-            // console.log(clickItemId);
-            // console.log(clickItemId.includes(clickedButtonId));
-            if(clickItemId.includes(clickedButtonId) === false){
-                console.log('hello i am from if*****',clickedButtonId);
-                clickItemId.push(clickedButtonId);
-                clickedSelectButton(clickedButtonId);
-            }else if(clickItemId.includes(clickedButtonId) === true){
-                console.log('hello i am from else if*****',clickedButtonId);
-                clickItemId.filter(item => item !== clickedButtonId);
-                // clickedUnSelectButton(clickedButtonId);
-                // console.log(clickItemId);
-            }
-            
+    const clickedButtonId =event.target.innerText;
+    if(event.target.classList.contains('myButton') === true){
+        if(clickItemId.includes(clickedButtonId) === true){
+            clickedUnSelectButton(clickedButtonId);
+            const itemIndex = clickItemId.indexOf(clickedButtonId);
+            clickItemId.splice(itemIndex, 1);
         }
-    })
-// const test='hello';
-// const buttonContainer = document.getElementById('buttonContainer');
-// buttonContainer.addEventListener('click', event => {
-// console.log(buttonContainer.childNodes[1].classList.contains('clickedItem'));
-//     if(event.target.classList.contains('myButton') === true && event.target.classList.contains('clickedItem') === false ){
-//         const clickedButton = event.target.innerText;
-//         selectTicket(clickedButton);
-//     }
-//     // console.log();
-//     // Check if a button was clicked
-//     // if (event.target && event.target.classList.contains('myButton')) {
-//     //     // Get the clicked button
-//     //     const clickedButton = event.target;
+        else {
+             if(clickItemId.length <= 3){
+                clickedSelectButton(clickedButtonId);
+                clickItemId.push(clickedButtonId);
+             }else{
+                alert('You can select maximum 4 ticket');
+             } 
+        }
+    }
+})
 
-//     //     // Perform an action based on the clicked button
-//     //     const buttonId = clickedButton.getAttribute('data-id');
-//     //     alert(`Button ${buttonId} was clicked!`);
+document.getElementById('coupon-input').addEventListener('keyup', function(event){
+    const couponInputValue = event.target.value
+    const couponElementNew15 = document.getElementById('NEW15');
+    const couponTextNew15 = couponElementNew15.innerText;
+    const couponElementCouple20 = document.getElementById('couple-20');
+    const couponTextCouple20 =  couponElementCouple20.innerText;
+    // console.log(couponText);
+    // console.log(couponInputValue);
 
-//     //     // You can also access other properties like text content
-//     //     console.log(`Button text: ${clickedButton.textContent}`);
-//     // }
-// });
-// function selectTicket(elementId) {
-//     let elementIdStore = [];
-//     const hasId =elementIdStore.includes(elementId);
-//     console.log(hasId);
-//     elementIdStore.push(elementId);
-//     console.log(elementIdStore);
-//     // if(elementIdStore.includes(elementId)===false){
-//     //     elementIdStore.push(elementId);
-//     //     console.log('item push');
-//     // }else{
-//     //     console.log('item already exist');
-//     // }
-// }
+    if(couponInputValue === couponTextNew15 || couponInputValue === couponTextCouple20){
+        const btnApply = document.getElementById('btn-apply');
+        btnApply.removeAttribute('disabled');
+        
 
+        // console.log(grandTotalPrice);
 
-// console.log(myBtn);
-// const myBtn= document.querySelectorAll(".my-button");
-// console.log(myBtn);
+    }else{
+        // console.log('***************')
+        const btnApply = document.getElementById('btn-apply');
+        btnApply.setAttribute('disabled', false);
+    }
+})
 
+document.getElementById('btn-apply').addEventListener('click', function(event){
+    const couponInputElement = document.getElementById('coupon-input');
+    const couponInputValue = couponInputElement.value;
+    const couponElementNew15 = document.getElementById('NEW15');
+    const couponTextNew15 = couponElementNew15.innerText;
+    const couponElementCouple20 = document.getElementById('couple-20');
+    const couponTextCouple20 =  couponElementCouple20.innerText;
+    if(couponInputValue === couponTextNew15){
+        const grandTotalPriceElement = document.getElementById('grand-total-price');
+        const grandTotalPriceNumber  = parseInt(grandTotalPriceElement.innerText);
+        const grandTotalPrice = (grandTotalPriceNumber * 15)/100 ;
+        grandTotalPriceElement.innerText = grandTotalPriceNumber - grandTotalPrice;
+        const discountContainerElement = document.getElementById('discount-container');
+        discountContainerElement.classList.add('hidden');
+        const totalDiscountContainer =  document.getElementById('total-discount-container');
+        totalDiscountContainer.classList.add('flex', 'flex-row', 'justify-between', 'py-5');
+        const p =document.createElement('p');
+        p.classList.add('text-sm','font-inter', 'font-medium');
+        p.innerText="Discount";
+        const p2 =document.createElement('p');
+        p2.classList.add('text-sm','font-inter', 'font-medium');
+        p2.innerText= '-' + grandTotalPrice;
+        totalDiscountContainer.appendChild(p);
+        totalDiscountContainer.appendChild(p2);
 
-// myBtn.addEventListener('click', function(event){
-//     console.log('btn click');
-// } )
+    }else if(couponInputValue === couponTextCouple20){
+        const grandTotalPriceElement = document.getElementById('grand-total-price');
+        const grandTotalPriceNumber  = parseInt(grandTotalPriceElement.innerText);
+        const grandTotalPrice = (grandTotalPriceNumber * 20)/100 ;
+        grandTotalPriceElement.innerText = grandTotalPriceNumber - grandTotalPrice;
+        const discountContainerElement = document.getElementById('discount-container');
+        discountContainerElement.classList.add('hidden');
+        const totalDiscountContainer =  document.getElementById('total-discount-container');
+        totalDiscountContainer.classList.add('flex', 'flex-row', 'justify-between', 'py-5');
+        const p =document.createElement('p');
+        p.classList.add('text-sm','font-inter', 'font-medium');
+        p.innerText="Discount";
+        const p2 =document.createElement('p');
+        p2.classList.add('text-sm','font-inter', 'font-medium');
+        p2.innerText= '-' + grandTotalPrice;
+        totalDiscountContainer.appendChild(p);
+        totalDiscountContainer.appendChild(p2);
+        // document.getElementById('discount-container').classList.add('hidden');
 
-// document.getElementById("A1").addEventListener('click', function (event){
-//     console.log(event);
-// })
-
-// function selectTicket(elementId) {
-
-//     const selectedSet = document.getElementById(elementId);
-//     selectedSet.style.backgroundColor = 'green';
-//     selectedSet.style.color = 'white';
-//     selectedSet.classList.add('clickedItem');
-//     const totalSitElement = document.getElementById('totalSit');
-//     const totalSitString = totalSitElement.innerText;
-//     const totalSitNumber = parseInt(totalSitString);
-//     const totalSitAfterSelect = totalSitNumber - 1;
-//     totalSitElement.innerText = totalSitAfterSelect;
-//     const numberOfSelectSit = document.getElementById('numberOfSelectSit');
-//     const totalSelectSitElement = parseInt(numberOfSelectSit.innerText);
-//     const totalSelectSit = totalSelectSitElement + 1;
-//     numberOfSelectSit.innerText = totalSelectSit;
-//     const ticketPrice = 550;
-//     const ticketDetails = document.getElementById('ticket-details');
-//     const div = document.createElement('div');
-//     div.classList.add('flex', 'flex-row', 'justify-between');
-//     ticketDetails.appendChild(div);
-//     const p = document.createElement('p');
-//     p.classList.add("font-inter", "font-normal", "text-sm");
-//     const p2 = document.createElement('p');
-//     p2.classList.add('font-inter', 'font-normal', 'text-sm');
-//     const p3 = document.createElement('p');
-//     p3.classList.add('font-inter', 'font-normal', 'text-sm');
-//     p.innerText = selectedSet.innerText;
-//     p2.innerText = 'Economoy';
-//     p3.innerText = ticketPrice;
-//     div.appendChild(p);
-//     div.appendChild(p2);
-//     div.appendChild(p3);
-//     const totalPriceElement = document.getElementById('total-price');
-//     const totalPriceElementNumber = parseInt(totalPriceElement.innerText);
-//     const totalPrice = totalPriceElementNumber + ticketPrice;
-//     totalPriceElement.innerText = totalPrice;
-    
-// }
+    }
+});
